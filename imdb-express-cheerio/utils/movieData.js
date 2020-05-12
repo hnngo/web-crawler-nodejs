@@ -10,7 +10,18 @@ const getMovieData = ($) => {
   const titleWrapper = $(".title_wrapper").children().first();
   const title = titleWrapper.get(0).children[0].data;
   const release = titleWrapper.children().first().children().first().text();
-  const genres = $(".subtext").children().get(3).children[0].data;
+
+  const genres = [];
+  $(".subtext")
+    .children()
+    .filter("a")
+    .each((index, elem) => {
+      const { href } = elem.attribs;
+      console.log(elem);
+      if (!!href && href.includes("genre")) {
+        genres.push(elem.children[0].data);
+      }
+    });
 
   // For cases when movie has unknown length
   const lengthElem = $(".subtext").children().get(1);
@@ -33,14 +44,13 @@ const getMovieData = ($) => {
     title,
     release,
     length: trimNewLine(length),
-    genres,
     rating,
     posterImage,
     summray,
   };
   const formattedResponse = mapFunc(response, trimWhiteSpaceHeadAndTail);
 
-  return formattedResponse;
+  return { ...formattedResponse, genres };
 };
 
 module.exports = { getMovieData };
