@@ -2,48 +2,85 @@ const request = require("request");
 const cheerio = require("cheerio");
 const fs = require("fs");
 
-const { getMovieData } = require("../utils");
+const { getMovieData, createObj } = require("../utils");
 
 module.exports = (app) => {
-  app.get("/imdb/:id", function (req, res) {
-    const id = req.params.id;
+  app.get("/imdb/:ids", function (req, res) {
+    let ids = req.params.ids;
     const { out } = req.query;
-    if (!id) {
+    if (!ids) {
       res.send({});
       return;
     }
+    ids = ids.split("-");
 
-    // Prepare URL
-    url = `http://www.imdb.com/title/${id}`;
-    console.log(`Visiting ${url}...`);
+    const promises = [];
+    ids.forEach((id, index) => {
+      // Prepare URL
+      url = `http://www.imdb.com/title/${id}`;
+      console.log(`Visiting ${url}...`);
 
-    request(url, function (error, response, html) {
-      if (!error) {
-        // Load html to $ using cheerio
-        const $ = cheerio.load(html);
+      promises[index] = new Promise((resolve) => {
+        request(url, function (error, response, html) {
+          if (!error) {
+            // Load html to $ using cheerio
+            const $ = cheerio.load(html);
 
-        // Get all needed movie data
-        const response = getMovieData($);
+            // Get all needed movie data
+            const response = getMovieData($);
 
-        // Check if 404 exist
-        if (!response) {
-          res.send("Please check again your movie id");
-          return;
-        }
-
-        // Check if need to write to file
-        out &&
-          out.toLowerCase() === "true" &&
-          fs.writeFile("./output.json", JSON.stringify(response), (err) => {
-            console.log(err);
-          });
-
-        // Send back to user
-        res.send(response);
-      } else {
-        res.send({});
-      }
+            // Check if error exist
+            !!response ? resolve(response) : resolve("Fail to load");
+          } else {
+            resolve("Fail to load");
+          }
+        });
+      });
     });
+
+    Promise.all(promises).then((value) => {
+      const response = createObj(ids, value);
+      res.send(response);
+    });
+
+    // // // Prepare URL
+    // // url = `http://www.imdb.com/title/${id}`;
+    // // console.log(`Visiting ${url}...`);
+
+    // request(url, function (error, response, html) {
+    //   if (!error) {
+    //     // Load html to $ using cheerio
+    //     const $ = cheerio.load(html);
+
+    //     // Get all needed movie data
+    //     const response = getMovieData($);
+
+    //     // Check if 404 exist
+    //     if (!response) {
+    //       res.send("Please check again your movie id");
+    //       return;
+    //     }
+
+    //     // Check if need to write to file
+    //     out &&
+    //       out.toLowerCase() === "true" &&
+    //       fs.writeFile("./output.json", JSON.stringify(response), (err) => {
+    //         console.log(err);
+    //       });
+
+    //     // Send back to user
+    //     res.send(response);
+    //   } else {
+    //     res.send({});
+    //   }
+    // });
+
+    // // Check if need to write to file
+    // out &&
+    //   out.toLowerCase() === "true" &&
+    //   fs.writeFile("./output.json", JSON.stringify(response), (err) => {
+    //     console.log(err);
+    //   });
 
     return;
   });
