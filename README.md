@@ -21,6 +21,7 @@ $ npm run start
 This project is particular for Imdb website https://www.imdb.com/.  
 To run this project, following the installation and go to `http://localhost:8000/imdb/:ids`  
 With `:ids` is a list of id (delimiter by `-`) of the movies that you want to crawl
+Append the querry `?out=true` at the end of URL to get the file output name `output.json` in directory.  
 
 For example with movie `Avengers: End Game`, its id is `tt4154796`. Thus, go to `http://localhost:8000/imdb/tt4154796` and view the result  
 ![imdb-test-img](img/imdb-one-movie.png)
