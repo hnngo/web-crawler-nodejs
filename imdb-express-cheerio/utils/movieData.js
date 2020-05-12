@@ -10,10 +10,16 @@ const getMovieData = ($) => {
   const titleWrapper = $(".title_wrapper").children().first();
   const title = titleWrapper.get(0).children[0].data;
   const release = titleWrapper.children().first().children().first().text();
-  const length = $(".subtext").children().get(1).children[0].data;
   const genres = $(".subtext").children().get(3).children[0].data;
-  const rating =
-    $(".ratingValue").children().first().children().first().text() + "/10";
+
+  // For cases when movie has unknown length
+  const lengthElem = $(".subtext").children().get(1);
+  const length = lengthElem.name === "time" ? lengthElem.children[0].data : "";
+
+  // For cases when movie not yet release
+  let rating = $(".ratingValue").children().first().children().first().text();
+  rating = rating ? rating + "/10" : "";
+
   const posterImage = $(".poster")
     .children()
     .first()
