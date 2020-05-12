@@ -4,7 +4,7 @@ This is personal project for web crawling/scraping topics. It includes few ways 
 
 ### Installation
 
-This project requires [Node.js](https://nodejs.org/) to run.
+This project requires [Node.js](https://nodejs.org/) to run.  
 Go to each project to install the dependencies and devDependencies and start the server.
 For example with project Imdb Crawling
 ```sh
@@ -14,7 +14,7 @@ $ npm run start
 ```
 
 ### Imdb Crawling
-This project is particular for Imdb website https://www.imdb.com/
-To run this project, following the installation and go to `http://localhost:8000/imdb/:id`
-With `:id` is the id of the movie you want to crawl, for example with movie `Avengers: End Game`, its id is `tt4154796`. Thus, go to `http://localhost:8000/imdb/tt4154796` and view the result
+This project is particular for Imdb website https://www.imdb.com/.  
+To run this project, following the installation and go to `http://localhost:8000/imdb/:id`  
+With `:id` is the id of the movie you want to crawl, for example with movie `Avengers: End Game`, its id is `tt4154796`. Thus, go to `http://localhost:8000/imdb/tt4154796` and view the result  
 ![imdb-test-img](img/imdb-testing.png)
