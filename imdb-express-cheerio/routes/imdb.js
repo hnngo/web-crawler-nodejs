@@ -8,6 +8,7 @@ const {
   trimParenthesis,
   trimWhiteSpace,
   trimNewLine,
+  findClassname,
 } = require("../utils");
 
 module.exports = (app) => {
@@ -91,24 +92,20 @@ module.exports = (app) => {
             const listOfMovies = $(".lister-item");
 
             listOfMovies.each((index, elem) => {
-              const content = elem.children.find((e) => {
-                return e.attribs && e.attribs.class === "lister-item-content";
-              });
-              const header = content.children.find((e) => {
-                return e.attribs && e.attribs.class === "lister-item-header";
-              });
+              const content = elem.children.find((e) =>
+                findClassname(e, "lister-item-content")
+              );
+              const header = content.children.find((e) =>
+                findClassname(e, "lister-item-header")
+              );
               const title = header.children.find((e) => {
                 return e.name === "a";
               }).children[0].data;
 
               // For case unknown release year
-              let releaseYear = header.children.find((e) => {
-                return (
-                  e.attribs &&
-                  e.attribs.class &&
-                  e.attribs.class.includes("lister-item-year")
-                );
-              }).children[0];
+              let releaseYear = header.children.find((e) =>
+                findClassname(e, "lister-item-year")
+              ).children[0];
               releaseYear = releaseYear
                 ? trimParenthesis(releaseYear.data)
                 : "";
@@ -121,15 +118,22 @@ module.exports = (app) => {
               // Length
               let length = $(".genre")
                 .get(index)
-                .parent.childNodes.find((e) => {
-                  return (
-                    e.attribs &&
-                    e.attribs.class &&
-                    e.attribs.class === "runtime"
-                  );
-                });
+                .parent.childNodes.find((e) => findClassname(e, "runtime"));
               length = length ? length.children[0].data : "";
-              console.log(length);
+
+              // Rating
+              let rating = "";
+              const ratingElem = content.childNodes.find((e) =>
+                findClassname(e, "ipl-rating-widget")
+              );
+              if (ratingElem) {
+                rating = ratingElem.childNodes
+                  .find((e) => findClassname(e, "ipl-rating-star"))
+                  .childNodes.find((e) =>
+                    findClassname(e, "ipl-rating-star__rating")
+                  ).children[0].data;
+              }
+              console.log(rating);
               if (index == 1) {
                 index;
               }
