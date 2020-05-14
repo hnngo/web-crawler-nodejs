@@ -10,7 +10,7 @@ const {
   trimNewLine,
   findClassname,
   findName,
-  trimWhiteSpaceHeadAndTail
+  trimWhiteSpaceHeadAndTail,
 } = require("../utils");
 
 module.exports = (app) => {
@@ -143,12 +143,16 @@ module.exports = (app) => {
                   e.children[0].data.length > 40
               );
               summary = summary
-                ? trimWhiteSpaceHeadAndTail(trimNewLine(summary.children[0].data))
+                ? trimWhiteSpaceHeadAndTail(
+                    trimNewLine(summary.children[0].data)
+                  )
                 : "";
-              console.log(summary);
-              if (index == 1) {
-                index;
-              }
+
+              // Poster
+              const poster = $(".lister-item-image")
+                .get(index)
+                .childNodes.find((e) => findName(e, "a"))
+                .childNodes.find((e) => findName(e, "img")).attribs.loadlate;
             });
 
             // Check if error exist
