@@ -84,8 +84,7 @@ module.exports = (app) => {
             const response = getMovieDataFromList($);
 
             // Check if error exist
-            // !!response ? resolve(response) : resolve("Fail to load");
-            resolve(response);
+            !!response ? resolve(response) : resolve("Fail to load");
           } else {
             resolve("Fail to load");
           }
@@ -105,7 +104,6 @@ module.exports = (app) => {
         });
     });
 
-    return;
     return;
   });
 };

@@ -62,6 +62,11 @@ const getMovieData = ($) => {
 };
 
 const getMovieDataFromList = ($) => {
+  // Check if 404 exist
+  if ($(".error_code_404").length || $("#unavailable").length) {
+    return false;
+  }
+
   const res = {};
   const listOfMovies = $(".lister-item");
 
