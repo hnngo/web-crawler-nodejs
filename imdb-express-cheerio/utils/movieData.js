@@ -11,13 +11,14 @@ const getMovieData = ($) => {
   const title = titleWrapper.get(0).children[0].data;
   const release = titleWrapper.children().first().children().first().text();
 
+  // Get all genres
   const genres = [];
   $(".subtext")
     .children()
     .filter("a")
     .each((index, elem) => {
       const { href } = elem.attribs;
-      console.log(elem);
+
       if (!!href && href.includes("genre")) {
         genres.push(elem.children[0].data);
       }

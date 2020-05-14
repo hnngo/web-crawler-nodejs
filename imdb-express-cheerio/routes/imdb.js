@@ -5,9 +5,12 @@ const fs = require("fs");
 const { getMovieData, createObj } = require("../utils");
 
 module.exports = (app) => {
+  // Route crawling by ID
   app.get("/imdb/:ids", function (req, res) {
-    let ids = req.params.ids;
     const { out } = req.query;
+    let ids = req.params.ids;
+
+    // Check if ids exist
     if (!ids) {
       res.send({});
       return;
@@ -50,6 +53,21 @@ module.exports = (app) => {
         });
     });
 
+    return;
+  });
+
+  // Route crawling by lists
+  app.get("/imdb/l/:ids", function (req, res) {
+    const { out } = req.query;
+    let ids = req.params.ids;
+
+    // Check if ids exist
+    if (!ids) {
+      res.send({});
+      return;
+    }
+    ids = ids.split("-");
+    console.log(ids);
     return;
   });
 };
