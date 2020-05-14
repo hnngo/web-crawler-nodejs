@@ -1,6 +1,7 @@
 const { trimNewLine, trimWhiteSpaceHeadAndTail } = require("./string");
 const { mapFunc } = require("./response");
 
+// Util for geting movie data from id detail page
 const getMovieData = ($) => {
   // Check if 404 exist
   if ($(".error_code_404").length > 0) {

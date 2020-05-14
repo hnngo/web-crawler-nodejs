@@ -2,7 +2,7 @@ const request = require("request");
 const cheerio = require("cheerio");
 const fs = require("fs");
 
-const { getMovieData, createObj } = require("../utils");
+const { getMovieData, createObj, trimParenthesis } = require("../utils");
 
 module.exports = (app) => {
   // Route crawling by ID
@@ -95,7 +95,19 @@ module.exports = (app) => {
                 return e.name === "a";
               }).children[0].data;
 
-              console.log(title);
+              // For case unknown release year
+              let releaseYear = header.children.find((e) => {
+                return (
+                  e.attribs &&
+                  e.attribs.class &&
+                  e.attribs.class.includes("lister-item-year")
+                );
+              }).children[0];
+              releaseYear = releaseYear
+                ? trimParenthesis(releaseYear.data)
+                : "";
+
+              console.log(releaseYear);
               if (index == 1) {
                 index;
               }
