@@ -117,7 +117,19 @@ module.exports = (app) => {
               const genre = trimWhiteSpace(
                 trimNewLine($(".genre").get(index).children[0].data)
               ).split(",");
-              console.log(genre);
+
+              // Length
+              let length = $(".genre")
+                .get(index)
+                .parent.childNodes.find((e) => {
+                  return (
+                    e.attribs &&
+                    e.attribs.class &&
+                    e.attribs.class === "runtime"
+                  );
+                });
+              length = length ? length.children[0].data : "";
+              console.log(length);
               if (index == 1) {
                 index;
               }
