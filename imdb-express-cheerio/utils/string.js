@@ -8,6 +8,11 @@ const trimWhiteSpaceHeadAndTail = (s) => {
   return s.trimLeft().trimRight();
 };
 
+const trimWhiteSpace = (s) => {
+  if (!s) return;
+  return s.replace(/ /g, "");
+};
+
 const trimParenthesis = (s) => {
   if (!s) return;
   return s.replace(/[^0-9\.]+/g, "");
@@ -15,6 +20,7 @@ const trimParenthesis = (s) => {
 
 module.exports = {
   trimNewLine,
+  trimWhiteSpace,
   trimParenthesis,
   trimWhiteSpaceHeadAndTail,
 };

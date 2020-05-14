@@ -2,7 +2,13 @@ const request = require("request");
 const cheerio = require("cheerio");
 const fs = require("fs");
 
-const { getMovieData, createObj, trimParenthesis } = require("../utils");
+const {
+  getMovieData,
+  createObj,
+  trimParenthesis,
+  trimWhiteSpace,
+  trimNewLine,
+} = require("../utils");
 
 module.exports = (app) => {
   // Route crawling by ID
@@ -107,7 +113,11 @@ module.exports = (app) => {
                 ? trimParenthesis(releaseYear.data)
                 : "";
 
-              console.log(releaseYear);
+              // Genre
+              const genre = trimWhiteSpace(
+                trimNewLine($(".genre").get(index).children[0].data)
+              ).split(",");
+              console.log(genre);
               if (index == 1) {
                 index;
               }
