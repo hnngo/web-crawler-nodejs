@@ -67,7 +67,63 @@ module.exports = (app) => {
       return;
     }
     ids = ids.split("-");
-    console.log(ids);
+
+    const promises = [];
+    ids.forEach((id, index) => {
+      // Prepare URL
+      url = `http://www.imdb.com/list/${id}`;
+      console.log(`Visiting ${url}...`);
+
+      promises[index] = new Promise((resolve) => {
+        request(url, function (error, response, html) {
+          if (!error) {
+            // Load html to $ using cheerio
+            const $ = cheerio.load(html);
+
+            // Get all needed movie data
+            // const response = getMovieData($);
+            const listOfMovies = $(".lister-item");
+
+            listOfMovies.each((index, elem) => {
+              const content = elem.children.find((e) => {
+                return e.attribs && e.attribs.class === "lister-item-content";
+              });
+              const header = content.children.find((e) => {
+                return e.attribs && e.attribs.class === "lister-item-header";
+              });
+              const title = header.children.find((e) => {
+                return e.name === "a";
+              }).children[0].data;
+
+              console.log(title);
+              if (index == 1) {
+                index;
+              }
+            });
+
+            // Check if error exist
+            // !!response ? resolve(response) : resolve("Fail to load");
+            resolve({ a: "" });
+          } else {
+            resolve("Fail to load");
+          }
+        });
+      });
+    });
+
+    Promise.all(promises).then((value) => {
+      const response = createObj(ids, value);
+      res.send(response);
+
+      // Check if need to write to file
+      out &&
+        out.toLowerCase() === "true" &&
+        fs.writeFile("./output.json", JSON.stringify(response), (err) => {
+          console.log(err);
+        });
+    });
+
+    return;
     return;
   });
 };
