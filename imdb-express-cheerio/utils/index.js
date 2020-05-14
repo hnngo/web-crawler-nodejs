@@ -1,11 +1,11 @@
 const utilString = require("./string");
 const utilResponse = require("./response");
 const utilMovie = require("./movieData");
-const utilFindClassname = require("./findClassname");
+const findElem = require("./findElem");
 
 module.exports = {
   ...utilString,
   ...utilResponse,
   ...utilMovie,
-  ...utilFindClassname,
+  ...findElem,
 };

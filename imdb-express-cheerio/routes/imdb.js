@@ -9,6 +9,8 @@ const {
   trimWhiteSpace,
   trimNewLine,
   findClassname,
+  findName,
+  trimWhiteSpaceHeadAndTail
 } = require("../utils");
 
 module.exports = (app) => {
@@ -98,9 +100,8 @@ module.exports = (app) => {
               const header = content.children.find((e) =>
                 findClassname(e, "lister-item-header")
               );
-              const title = header.children.find((e) => {
-                return e.name === "a";
-              }).children[0].data;
+              const title = header.children.find((e) => findName(e, "a"))
+                .children[0].data;
 
               // For case unknown release year
               let releaseYear = header.children.find((e) =>
@@ -133,7 +134,18 @@ module.exports = (app) => {
                     findClassname(e, "ipl-rating-star__rating")
                   ).children[0].data;
               }
-              console.log(rating);
+
+              // Summary
+              let summary = content.childNodes.find(
+                (e) =>
+                  findName(e, "p") &&
+                  e.children[0].type === "text" &&
+                  e.children[0].data.length > 40
+              );
+              summary = summary
+                ? trimWhiteSpaceHeadAndTail(trimNewLine(summary.children[0].data))
+                : "";
+              console.log(summary);
               if (index == 1) {
                 index;
               }
