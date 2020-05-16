@@ -18,7 +18,7 @@ $ npm run start
 
 ## Imdb Crawling
 
-This project is particular for Imdb website https://www.imdb.com/. We can crawl both by `id` or a public `list`.  
+This project is particular for Imdb website https://www.imdb.com/. We can crawl both by movie id or a public list id.  
 
 ### Crawl by id or list of id
 To run this project, following the installation and go to `http://localhost:8000/imdb/:ids`  
@@ -26,10 +26,10 @@ With `:ids` is a list of id (delimiter by `-`) of the movies that you want to cr
 Append the querry `?out=true` at the end of URL to get the file output name `output.json` in directory.  
 
 For example with movie `Avengers: End Game`, its id is `tt4154796`. Thus, go to `http://localhost:8000/imdb/tt4154796` and view the result  
-![imdb-test-img](img/imdb-one-movie.png)
+![imdb-test-img](img/imdb-one-movie-id.png)
 
 For example with list of movies such as `http://localhost:8000/imdb/tt6723592-tt9686708-tt8579674`  
-![imdb-test-list-img](img/imdb-list-of-movies.png)
+![imdb-test-list-img](img/imdb-list-of-movie-ids.png)
 
 ### Crawl by list or list of id
 To run this project, following the installation and go to `http://localhost:8000/imdb/l/:ids`  
@@ -37,7 +37,4 @@ With `:ids` is a list of list (delimiter by `-`) of the movies that you want to 
 Append the querry `?out=true` at the end of URL to get the file output name `output.json` in directory.  
 
 For example with the list `Web series` (https://www.imdb.com/list/ls095501479), its id is `ls095501479`. Thus, go to `http://localhost:8000/imdb/l/ls095501479` and view the result  
-![imdb-test-img](img/imdb-one-movie.png)
-
-For example with list of movies such as `http://localhost:8000/imdb/tt6723592-tt9686708-tt8579674`  
-![imdb-test-list-img](img/imdb-list-of-movies.png)
+![imdb-test-img](img/imdb-movie-list.png)
