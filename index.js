@@ -1,6 +1,8 @@
 const express = require("express");
 const { Command } = require("commander");
 
+const { getMovieData } = require("./utils");
+
 // Init needed app
 const app = express();
 const program = new Command();
@@ -11,16 +13,19 @@ imdbRoutes(app);
 
 // Septup command line
 program.version("0.0.1");
-
 program
-  .option("-d, --debug", "output extra debugging")
-  .option("-s, --small", "small pizza size")
-  .option("-p, --pizza-type <type>", "flavour of pizza")
+  .option("-i, --id <id>", "id of move or list of ids of movie delimeter by -")
+  .option("-l, --list <id>", "id of list or list of ids of list delimeter by -")
+  .option("-o, --out <name>", "output the result")
   .parse(process.argv);
 
-if (program.debug) {
-  console.log("Debug");
+if (program.id) {
+  // Crawl with CLI
+  const ids = program.id.split("-");
+
+  getMovieData({ ids }).then(console.log);
 } else {
+  // Crawl with UI
   const PORT = 8000;
   app.listen(PORT, () => console.log(`Crawling on port ${PORT}....`));
 }

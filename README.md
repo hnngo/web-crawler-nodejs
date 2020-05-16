@@ -27,10 +27,10 @@ With `:ids` is a list of id (delimiter by `-`) of the movies that you want to cr
 Append the querry `?out=true` at the end of URL to get the file output name `output.json` in directory.
 
 For example with movie `Avengers: End Game`, its id is `tt4154796`. Thus, go to `http://localhost:8000/imdb/tt4154796` and view the result  
-![imdb-test-img](img/imdb-one-movie-id.png)
+![imdb-test-img](assets/img/imdb-one-movie-id.png)
 
 For example with list of movies such as `http://localhost:8000/imdb/tt6723592-tt9686708-tt8579674`  
-![imdb-test-list-img](img/imdb-list-of-movie-ids.png)
+![imdb-test-list-img](assets/img/imdb-list-of-movie-ids.png)
 
 ### Crawl by list of movies (created by user)
 
@@ -39,4 +39,4 @@ With `:ids` is a list of list (delimiter by `-`) of the movies that you want to 
 Append the querry `?out=true` at the end of URL to get the file output name `output.json` in directory.
 
 For example with the list `Web series` (https://www.imdb.com/list/ls095501479), its id is `ls095501479`. Thus, go to `http://localhost:8000/imdb/l/ls095501479` and view the result  
-![imdb-test-img](img/imdb-movie-list.png)
+![imdb-test-img](assets/img/imdb-movie-list.png)
