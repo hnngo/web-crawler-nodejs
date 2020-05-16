@@ -1,3 +1,5 @@
+const request = require("request");
+const cheerio = require("cheerio");
 const {
   trimNewLine,
   trimWhiteSpaceHeadAndTail,
@@ -5,10 +7,44 @@ const {
   trimWhiteSpace,
 } = require("./string");
 const { findClassname, findName } = require("./findElem");
-const { mapFunc } = require("./response");
+const { mapFunc, createObj } = require("./response");
+
+//
+const getMovieData = ({ ids, isById = true }) => {
+  const promises = [];
+  ids.forEach((id, index) => {
+    // Prepare URL
+    url = isById
+      ? `http://www.imdb.com/title/${id}`
+      : `http://www.imdb.com/list/${id}`;
+    console.log(`Visiting ${url}...`);
+
+    promises[index] = new Promise((resolve) => {
+      request(url, function (error, _, html) {
+        if (!error) {
+          // Load html to $ using cheerio
+          const $ = cheerio.load(html);
+
+          // Get all needed movie data
+          const response = isById ? getMovieDataById($) : getMovieDataByList($);
+
+          // Check if error exist
+          !!response ? resolve(response) : resolve("Fail to load");
+        } else {
+          resolve("Fail to load");
+        }
+      });
+    });
+  });
+
+  return Promise.all(promises).then((value) => {
+    const response = createObj(ids, value);
+    return response;
+  });
+};
 
 // Util for geting movie data from id detail page
-const getMovieData = ($) => {
+const getMovieDataById = ($) => {
   // Check if 404 exist
   if ($(".error_code_404").length > 0) {
     return false;
@@ -61,7 +97,7 @@ const getMovieData = ($) => {
   return { ...formattedResponse, genres };
 };
 
-const getMovieDataFromList = ($) => {
+const getMovieDataByList = ($) => {
   // Check if 404 exist
   if ($(".error_code_404").length || $("#unavailable").length) {
     return false;
@@ -152,4 +188,4 @@ const getMovieDataFromList = ($) => {
   return res;
 };
 
-module.exports = { getMovieData, getMovieDataFromList };
+module.exports = { getMovieData, getMovieDataById, getMovieDataByList };
