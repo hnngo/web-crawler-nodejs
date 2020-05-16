@@ -87,15 +87,24 @@ const getMovieDataFromList = ($) => {
     releaseYear = releaseYear ? trimParenthesis(releaseYear.data) : "";
 
     // Genre
-    const genre = trimWhiteSpace(
-      trimNewLine($(".genre").get(index).children[0].data)
-    ).split(",");
+    let genre = [];
+    let genreElem = content.childNodes
+      .find((e) => findName(e, "p"))
+      .childNodes.find((e) => findClassname(e, "genre"));
+    if (!!genreElem) {
+      genre = trimWhiteSpace(trimNewLine(genreElem.children[0].data)).split(
+        ","
+      );
+    }
 
     // Length
-    let length = $(".genre")
-      .get(index)
-      .parent.childNodes.find((e) => findClassname(e, "runtime"));
-    length = length ? length.children[0].data : "";
+    let length = "";
+    let lengthElem = content.childNodes
+      .find((e) => findName(e, "p"))
+      .childNodes.find((e) => findClassname(e, "runtime"));
+    if (!!lengthElem) {
+      length = lengthElem.children[0].data;
+    }
 
     // Rating
     let rating = "";
