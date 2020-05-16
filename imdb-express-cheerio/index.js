@@ -7,4 +7,4 @@ const imdbRoutes = require("./routes/imdb");
 imdbRoutes(app);
 
 const PORT = 8000;
-app.listen(PORT, () => console.log("Crawling...."));
+app.listen(PORT, () => console.log(`Crawling on port ${PORT}....`));
