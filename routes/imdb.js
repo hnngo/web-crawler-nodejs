@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { getMovieData } = require("../utils");
+const { getMovieData } = require("../services/movieData");
 
 module.exports = async (app) => {
   // Route crawling by ID

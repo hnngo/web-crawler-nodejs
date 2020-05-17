@@ -5,11 +5,12 @@ const {
   trimWhiteSpaceHeadAndTail,
   trimParenthesis,
   trimWhiteSpace,
-} = require("./string");
-const { findClassname, findName } = require("./findElem");
-const { mapFunc, createObj } = require("./response");
+  findClassname,
+  findName,
+  mapFunc,
+  createObj,
+} = require("../utils");
 
-//
 const getMovieData = ({ ids, isById = true }) => {
   const promises = [];
   ids.forEach((id, index) => {
@@ -188,4 +189,29 @@ const getMovieDataByList = ($) => {
   return res;
 };
 
-module.exports = { getMovieData, getMovieDataById, getMovieDataByList };
+// Retrieve id or list from path
+const retriveIdFromPath = (path) => {
+  const pathArr = path.split("/");
+  let ids;
+  let isById = true;
+  if (pathArr.includes("www.imdb.com")) {
+    const titleIndex = pathArr.indexOf("title");
+    const listIndex = pathArr.indexOf("list");
+
+    if (titleIndex >= 0) {
+      ids = pathArr[titleIndex + 1];
+    } else if (listIndex >= 0) {
+      ids = pathArr[listIndex + 1];
+      isById = false;
+    }
+  }
+
+  return { ids: ids.split("-"), isById };
+};
+
+module.exports = {
+  getMovieData,
+  getMovieDataById,
+  getMovieDataByList,
+  retriveIdFromPath,
+};
