@@ -39,6 +39,7 @@ const getMovieData = ({ ids, isById = true }) => {
   });
 
   return Promise.all(promises).then((value) => {
+    console.log(`Done crawling ${url}...`);
     const response = createObj(ids, value);
     return response;
   });
@@ -55,12 +56,12 @@ const getMovieDataById = ($) => {
   const title = titleWrapper.get(0).children[0].data;
   const release = titleWrapper.children().first().children().first().text();
 
-  // Get all genres
+  // Genres
   const genres = [];
   $(".subtext")
     .children()
     .filter("a")
-    .each((index, elem) => {
+    .each((_, elem) => {
       const { href } = elem.attribs;
 
       if (!!href && href.includes("genre")) {
@@ -68,11 +69,14 @@ const getMovieDataById = ($) => {
       }
     });
 
-  // For cases when movie has unknown length
-  const lengthElem = $(".subtext").children().get(1);
-  const length = lengthElem.name === "time" ? lengthElem.children[0].data : "";
+  // Length
+  const lengthElem = $(".subtext")
+    .children()
+    .get()
+    .find((e) => findName(e, "time"));
+  const length = lengthElem ? lengthElem.children[0].data : "";
 
-  // For cases when movie not yet release
+  // Year Release
   let rating = $(".ratingValue").children().first().children().first().text();
   rating = rating ? rating + "/10" : "";
 

@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { getMovieData } = require("../services/movieData");
+const { writeJsonToFile } = require("../utils");
 
 module.exports = async (app) => {
   // Route crawling by ID
@@ -17,11 +18,7 @@ module.exports = async (app) => {
     const response = await getMovieData({ ids });
 
     // Check if need to write to file
-    out &&
-      out.toLowerCase() === "true" &&
-      fs.writeFile("./output.json", JSON.stringify(response), (err) => {
-        console.log(err);
-      });
+    out && out.toLowerCase() === "true" && writeJsonToFile(response);
 
     res.send(response);
     return;
@@ -42,11 +39,7 @@ module.exports = async (app) => {
     const response = await getMovieData({ ids, isById: false });
 
     // Check if need to write to file
-    out &&
-      out.toLowerCase() === "true" &&
-      fs.writeFile("./output.json", JSON.stringify(response), (err) => {
-        console.log(err);
-      });
+    out && out.toLowerCase() === "true" && writeJsonToFile(response);
 
     res.send(response);
     return;

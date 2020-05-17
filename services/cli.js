@@ -12,7 +12,7 @@ const initCLI = (program) => {
     .option("-u, --url <url>", "a path/url to the crawling site")
     .option(
       "-i, --id <id>",
-      "id of move or list of ids of movie delimeter by -"
+      "id of movie or list of ids of movie delimeter by -"
     )
     .option(
       "-l, --list <id>",
@@ -49,6 +49,8 @@ const processCLI = (program) => {
           outputName ? writeJsonToFile(res, outputName) : console.log(res)
         );
       }
+
+      break;
     }
     default:
       if (program.id || program.list || program.path || program.out) {
