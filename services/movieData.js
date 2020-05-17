@@ -1,14 +1,52 @@
+const request = require("request");
+const cheerio = require("cheerio");
 const {
   trimNewLine,
   trimWhiteSpaceHeadAndTail,
   trimParenthesis,
   trimWhiteSpace,
-} = require("./string");
-const { findClassname, findName } = require("./findElem");
-const { mapFunc } = require("./response");
+  findClassname,
+  findName,
+  mapFunc,
+  createObj,
+} = require("../utils");
+
+const getMovieData = ({ ids, isById = true }) => {
+  const promises = [];
+  ids.forEach((id, index) => {
+    // Prepare URL
+    url = isById
+      ? `http://www.imdb.com/title/${id}`
+      : `http://www.imdb.com/list/${id}`;
+    console.log(`Visiting ${url}...`);
+
+    promises[index] = new Promise((resolve) => {
+      request(url, function (error, _, html) {
+        if (!error) {
+          // Load html to $ using cheerio
+          const $ = cheerio.load(html);
+
+          // Get all needed movie data
+          const response = isById ? getMovieDataById($) : getMovieDataByList($);
+
+          // Check if error exist
+          !!response ? resolve(response) : resolve("Fail to load");
+        } else {
+          resolve("Fail to load");
+        }
+      });
+    });
+  });
+
+  return Promise.all(promises).then((value) => {
+    console.log(`Done crawling ${url}...`);
+    const response = createObj(ids, value);
+    return response;
+  });
+};
 
 // Util for geting movie data from id detail page
-const getMovieData = ($) => {
+const getMovieDataById = ($) => {
   // Check if 404 exist
   if ($(".error_code_404").length > 0) {
     return false;
@@ -18,12 +56,12 @@ const getMovieData = ($) => {
   const title = titleWrapper.get(0).children[0].data;
   const release = titleWrapper.children().first().children().first().text();
 
-  // Get all genres
+  // Genres
   const genres = [];
   $(".subtext")
     .children()
     .filter("a")
-    .each((index, elem) => {
+    .each((_, elem) => {
       const { href } = elem.attribs;
 
       if (!!href && href.includes("genre")) {
@@ -31,11 +69,14 @@ const getMovieData = ($) => {
       }
     });
 
-  // For cases when movie has unknown length
-  const lengthElem = $(".subtext").children().get(1);
-  const length = lengthElem.name === "time" ? lengthElem.children[0].data : "";
+  // Length
+  const lengthElem = $(".subtext")
+    .children()
+    .get()
+    .find((e) => findName(e, "time"));
+  const length = lengthElem ? lengthElem.children[0].data : "";
 
-  // For cases when movie not yet release
+  // Year Release
   let rating = $(".ratingValue").children().first().children().first().text();
   rating = rating ? rating + "/10" : "";
 
@@ -61,7 +102,7 @@ const getMovieData = ($) => {
   return { ...formattedResponse, genres };
 };
 
-const getMovieDataFromList = ($) => {
+const getMovieDataByList = ($) => {
   // Check if 404 exist
   if ($(".error_code_404").length || $("#unavailable").length) {
     return false;
@@ -152,4 +193,29 @@ const getMovieDataFromList = ($) => {
   return res;
 };
 
-module.exports = { getMovieData, getMovieDataFromList };
+// Retrieve id or list from path
+const retriveIdFromPath = (path) => {
+  const pathArr = path.split("/");
+  let ids;
+  let isById = true;
+  if (pathArr.includes("www.imdb.com")) {
+    const titleIndex = pathArr.indexOf("title");
+    const listIndex = pathArr.indexOf("list");
+
+    if (titleIndex >= 0) {
+      ids = pathArr[titleIndex + 1];
+    } else if (listIndex >= 0) {
+      ids = pathArr[listIndex + 1];
+      isById = false;
+    }
+  }
+
+  return { ids: ids.split("-"), isById };
+};
+
+module.exports = {
+  getMovieData,
+  getMovieDataById,
+  getMovieDataByList,
+  retriveIdFromPath,
+};

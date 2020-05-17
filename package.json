@@ -1,0 +1,29 @@
+{
+  "name": "web-crawler-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hnngo/web-crawler-nodejs.git"
+  },
+  "author": "Nhan Ngo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hnngo/web-crawler-nodejs/issues"
+  },
+  "homepage": "https://github.com/hnngo/web-crawler-nodejs#readme",
+  "dependencies": {
+    "commander": "^5.1.0",
+    "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
