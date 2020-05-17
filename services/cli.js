@@ -9,14 +9,14 @@ const initCLI = (program) => {
       "-p, --project <project>",
       "select a specific project. Example -p imdb"
     )
-    .option("-u, --url <url>", "a path/url to the crawling site")
+    .option("-u, --url <url>", "url to the crawling site")
     .option(
       "-i, --id <id>",
-      "id of movie or list of ids of movie delimeter by -"
+      "id of movie or list of ids of movie separate by -"
     )
     .option(
       "-l, --list <id>",
-      "id of list or list of ids of list delimeter by -"
+      "id of list or list of ids of list separate by -"
     )
     .option("-o, --out <name>", "output the result as <name>.json")
     .parse(process.argv);
